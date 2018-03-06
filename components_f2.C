@@ -21,8 +21,29 @@ double components_f2(double *x, double *par){
    double f_intf=par[12];
    double scale=par[13];
 
+    //PHSP factors
+     Double_t m_jpsi=3.097;
+     Double_t m_phi=1.019;
+     Double_t m_eta=0.548;
+     Double_t m_etap=0.958;
+
+   Double_t p=0;
+   if ( (m*m-(m_phi+m_etap)*(m_phi+m_etap))>0. ) {
+     p=sqrt( (m*m-(m_phi+m_etap)*(m_phi+m_etap))*(m*m-(m_phi-m_etap)*(m_phi-m_etap)) ) / (2*m);
+   }
+   if (p<0) p=0;
+
+   Double_t q=0;
+   if ( (m_jpsi*m_jpsi-(m_eta+m)*(m_eta+m))>0. ) {
+     q=sqrt( (m_jpsi*m_jpsi-(m_eta+m)*(m_eta+m))*(m_jpsi*m_jpsi-(m_eta-m)*(m_eta-m)) ) / (2*m_jpsi);
+   }
+   if (q<0) q=0;
+
+    //PHSP factor=p^{l1+1/2}*q^{l2+1/2}
+    Double_t PHSPf=p*sqrt(p)*q*sqrt(q);
+
    //sig: |BW|^2
-   Double_t sig=1./( (m*m-mean*mean)*(m*m-mean*mean)+(mean*Gamma)*(mean*Gamma) );
+   Double_t sig=1./( (m*m-mean*mean)*(m*m-mean*mean)+(mean*Gamma)*(mean*Gamma) )*PHSPf*PHSPf;
 
    //bkg: poly
    Double_t low=1.96;//
@@ -41,7 +62,7 @@ double components_f2(double *x, double *par){
    if (bkg<0) bkg=0.0;
 
    //inter
-   Double_t inter=2.0*( cos(phi)*(m*m-mean*mean)-sin(phi)*mean*Gamma ) / ( (m*m-mean*mean)*(m*m-mean*mean)+(mean*Gamma)*(mean*Gamma) ) *sqrt(bkg);
+   Double_t inter=2.0*( cos(phi)*(m*m-mean*mean)-sin(phi)*mean*Gamma ) / ( (m*m-mean*mean)*(m*m-mean*mean)+(mean*Gamma)*(mean*Gamma) ) *sqrt(bkg) * PHSPf;
 
    //efficiency
    Double_t eff=0;

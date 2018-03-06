@@ -3,7 +3,7 @@
 
 using namespace RooFit;
 
-void fit_intf_constructive_with_pull(){
+void fit_intf_destructive_with_pull(){
 // fit to M(phi etap) considering interference between resonance and 3-body bkg.
 
   gSystem->Load("libRooFit");
@@ -56,9 +56,9 @@ void fit_intf_constructive_with_pull(){
   ////////////////////////
   RooRealVar mean("mean","mean",2.1,1.9,2.6);//
   RooRealVar Gamma("Gamma","Gamma",0.2,0.00001,0.5);//
-  RooRealVar phi("phi","phi",-2.1,-3.2,0.);//
+  RooRealVar phi("phi","phi",2.,0,3.2);//
 
-  RooRealVar ratio_f1("ratio_f1","ratio_f1",0.3,0.1,100.);//
+  RooRealVar ratio_f1("ratio_f1","ratio_f1",0.1,0.001,10.);//
 
     //polynomial (3body)
   RooRealVar p1("p1","p1", 0.0815);
@@ -84,7 +84,7 @@ void fit_intf_constructive_with_pull(){
 
   //Signal+3body+intf: f2
   ////////////////////////
-  RooRealVar ratio_f2("ratio_f2","ratio_f2",0.3,0.1,100.);//
+  RooRealVar ratio_f2("ratio_f2","ratio_f2",0.1,0.001,10.);//
 
     //polynomial (3body)
   RooRealVar p1_f2("p1_f2","", 0.0453);
@@ -259,7 +259,7 @@ void fit_intf_constructive_with_pull(){
   double Pr8=p5.getVal();
   double Pr9=p6.getVal();
 
-  double scale_f=3250;//S1
+  double scale_f=58000.;//S1
 
   //all
   TF1 *Func0=new TF1("Func0", components,1.9,2.6,14);
@@ -349,7 +349,7 @@ void fit_intf_constructive_with_pull(){
   Pr7=p4_f2.getVal();
   Pr8=p5_f2.getVal();
   Pr9=p6_f2.getVal();
-  double scale_f2=2550;//S2
+  double scale_f2=37000.;//S2
 
   //all
   TF1 *Func0_2=new TF1("Func0_2", components_f2,1.9,2.6,14);
@@ -492,7 +492,7 @@ void fit_intf_constructive_with_pull(){
   Func8->SetLineStyle(kDashed);
 
   //Legend
-  TLegend *leg = new TLegend (0.6127577,0.1869651,0.8042669,0.4628358,"");
+  TLegend *leg = new TLegend (0.6413946,0.2277187,0.7863688,0.4502962,"");
   leg->SetFillColor(0);
   leg->SetTextSize(0.04);
   leg->SetBorderSize(0);
@@ -587,14 +587,14 @@ void fit_intf_constructive_with_pull(){
   cout<<"nsig_f2=           "<<nsig_f2<<endl;
   cout<<"nbkg3_f1=          "<<nbkg3_f1<<endl;
   cout<<"nbkg3_f2=          "<<nbkg3_f2<<endl;
-  cout<<"phi=            "<<phi<<endl;
+  cout<<"phi=               "<<phi<<endl;
   cout<<"ratio_f1=          "<<ratio_f1<<endl;
   cout<<"ratio_f2=          "<<ratio_f2<<endl;
 
   ///////////////////
   //scale factor of f1
   double N_tot_1=Func0->Integral(low_,up_);//
-  double SCALE_F1=(1959.-275.-93)/N_tot_1;
+  double SCALE_F1=(1959.-275.-93.)/N_tot_1;
 
   double N_sig_1=Func1->Integral(low_,up_);
   double N_bkg_1=Func2->Integral(low_,up_);
@@ -617,6 +617,6 @@ void fit_intf_constructive_with_pull(){
   cout<<"N_intf_2="<<N_intf_2*SCALE_F2<<" +- "<<TMath::Sqrt(TMath::Abs(N_intf_2*SCALE_F2))<<endl;
   ///////////////////////
 
-  C1->Print("/Users/long/Desktop/Interference_constructive.pdf");
+  C1->Print("/Users/long/Desktop/Interference_destructive.pdf");
   cout<<"Finished!!!"<<endl;
 }
